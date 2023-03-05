@@ -1,0 +1,7 @@
+Dieser Code implementiert den Dijkstra-Algorithmus, der den kürzesten Pfad von einem Startknoten zu allen anderen Knoten in einem gegebenen Graphen berechnet.
+
+Zu Beginn wird eine Liste mit allen Knoten des Graphen erstellt. Zwei Dictionaries werden initialisiert, um die Kosten für den Besuch jedes Knotens und den kürzesten bisher bekannten Pfad zu einem Knoten zu speichern. Der "infinity" Wert für die Kosten wird mit sys.maxsize initialisiert. Die Kosten für den Startknoten werden jedoch auf 0 gesetzt.
+
+In einer while-Schleife werden die Knoten in unvisited_nodes durchlaufen, bis alle besucht wurden. In jeder Iteration wird der Knoten mit den niedrigsten Kosten ermittelt und seine Nachbarn werden aktualisiert, falls ein kürzerer Pfad zu ihnen gefunden wurde. Der beste Pfad zum aktuellen Knoten wird auch aktualisiert. Nach dem Besuch aller Nachbarn wird der Knoten als besucht markiert und aus unvisited_nodes entfernt.
+
+Schließlich werden die beiden Dictionaries previous_nodes und shortest_path zurückgegeben, die die kürzesten Pfade zum Startknoten und die Kosten zum Erreichen jedes Knotens enthalten.
