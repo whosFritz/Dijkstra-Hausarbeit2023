@@ -79,28 +79,28 @@ def dijkstra(graph, start_knoten):
     # Mittels diesem dictionary spart man sich die Kosten, jeden Knoten zu besuchen und ihn upzudaten.
     kuerzester_pfad = {}
 
-    # We'll use this dict to save the shortest known pfad to a node found so far
     # Mittels diesem dictionary,um den bisher bekanntestens kürzesten Pfad zu speicher um zu einem Knoten zu kommen.
     vorheriger_pfad = {}
 
-    # We'll use max_wichtung to initialize the "infinity" wichtung of the unvisited knoten
+    # Um die Gewichtung der Pfade zu vergleichen muss man einen "infinity-like" Werte festlegen für die unbesuchten Knoten
     max_wichtung = sys.maxsize
     for node in unbesuchte_knoten:
         kuerzester_pfad[node] = max_wichtung
-    # However, we initialize the starting node's wichtung with 0
+
+    # Startknoten hat die Gewichtung 0
     kuerzester_pfad[start_knoten] = 0
 
-    # The algorithm executes until we visit all knoten
+    # Der Algorithmus läuft bis alle Knoten besucht wurden.
     while unbesuchte_knoten:
-        # The code block below finds the node with the lowest score
+        # Dieser Code findet den Knoten mit der geringsten Gewichtung.
         aktueller_min_knoten = None
-        for node in unbesuchte_knoten:  # Iterate over the knoten
+        for node in unbesuchte_knoten:  # Über die Knoten iterieren
             if aktueller_min_knoten == None:
                 aktueller_min_knoten = node
             elif kuerzester_pfad[node] < kuerzester_pfad[aktueller_min_knoten]:
                 aktueller_min_knoten = node
 
-        # The code block below retrieves the current node's neighbors and updates their distances
+        # Dieser Code holt sich die Nachbarn des Knotens und updated deren Distanzen
         neighbors = graph.get_ausgehende_nachbarn(aktueller_min_knoten)
         for neighbor in neighbors:
             tentative_wichtung = kuerzester_pfad[aktueller_min_knoten] + \
@@ -110,7 +110,7 @@ def dijkstra(graph, start_knoten):
                 # We also update the best pfad to the current node
                 vorheriger_pfad[neighbor] = aktueller_min_knoten
 
-        # After visiting its neighbors, we mark the node as "visited"
+        # Nach dem jeder Nachbar besucht wurde, wird der Knoten als "besucht" markiert, indem er aus der Liste der "unbesuchten Knoten" entfernt wird
         unbesuchte_knoten.remove(aktueller_min_knoten)
 
     return vorheriger_pfad, kuerzester_pfad
@@ -141,36 +141,43 @@ while (True):
     else:
         print("Ungültige Eingabe")
 
+# Leere Set-Initalisierung für die Liste der Knoten (0 bis 9), es darf keine Dopplung geben, deswegen ein Set.
 knoten = set()
 
+# Einlesen der Datei.
 with open(dateizulesen, "r") as datei:
+    # für jede Zeile in der Datei, aufspalten und in das Set packen.
     for zeile in datei:
         knoten1, knoten2, gewicht = zeile.strip().split()
         knoten.add(knoten1)
         knoten.add(knoten2)
+        # Knoten falls noch nicht im Graphen-Dictionary in das Dictionary packen,
         if knoten1 not in origin_graph:
             origin_graph[knoten1] = {}
+        # falls doch, dann die Gewichtung anpassen
         origin_graph[knoten1][knoten2] = int(gewicht)
 
-knoten = list(knoten)  # umwandeln zu einer Liste
-knoten.sort()  # Knoten sortieren in aufsteigender Reihenfolge
+# Set wird umgewandelt zu einer Liste, damit datentypbezogene Operationen möglich sind.
+knoten = list(knoten)
+knoten.sort()  # Knoten sortieren in aufsteigender Reihenfolge.
 
 try:
-    # Eingabe des Startknotens und des Zielknotens über die Kommandozeile
+    # Eingabe des Startknotens und des Zielknotens über die Kommandozeile.
     while True:
         start = input("Startknoten[0-9]: ")
         zielknoten = input("Zielknoten[0-9]: ")
         if start in knoten and zielknoten in knoten:
             break
         else:
+            # Falls die Eingabe Falsch ist, wird die Eingabe wiederholt. Wenn nicht, gehts weiter.
             print("Falsche eingabe")
 
 except KeyError:
     print("Ungültige Eingabe")
 
 
-graph = Graph(knoten, origin_graph)
+graph = Graph(knoten, origin_graph)  # Erstellung des Graphen
 vorheriger_pfad, kuerzester_pfad = dijkstra(
-    graph=graph, start_knoten=start)
+    graph=graph, start_knoten=start)  # Funktion des Algorithmus ausführen
 print_ergebnis(vorheriger_pfad, kuerzester_pfad,
-               start_knoten=start, ziel_knoten=zielknoten)
+               start_knoten=start, ziel_knoten=zielknoten)  # Ausgabe des Ergebnis
