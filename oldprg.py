@@ -28,7 +28,7 @@ with open(dateizulesen, "r") as datei:
         if knoten1 not in graph:
             graph[knoten1] = {}
         graph[knoten1][knoten2] = int(gewicht)
-start = "0"
+    print(graph)
 
 
 def dijkstra(graph, start, ziel):
@@ -72,8 +72,8 @@ def dijkstra(graph, start, ziel):
 
 
 try:
-    start = input("Startknoten: ")
-    zielknoten = input("Zielknoten")
+    start = input("Startknoten[0-9]: ")
+    zielknoten = input("Zielknoten[0-9]: ")
 except KeyError:
     print("Ungültige Eingabe")
 dijkstra(graph, start, zielknoten)
