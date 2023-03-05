@@ -10,8 +10,8 @@ class Graph(object):
 
     def konstruiere_graph(self, knoten, origin_graph):
         '''
-        Diese Methode stellt sicher, dass der Graph symetrisch ist. 
-        Wenn ein weg von A nach B mit der Gewichtung W führt, 
+        Diese Methode stellt sicher, dass der Graph symetrisch ist.
+        Wenn ein weg von A nach B mit der Gewichtung W führt,
         dann führt auch ein Weg von B nach A mit der Gewichtung W.
         '''
         graph = {}
@@ -68,8 +68,8 @@ def print_ergebnis(vorheriger_pfad, kuerzester_pfad, start_knoten, ziel_knoten):
     # Add the start node manually
     pfad.append(start_knoten)
 
-    print("Der kürzeste Pfad hat die Länge/Gewichtung: {} und sieht wie folgt aus.".format(
-        kuerzester_pfad[ziel_knoten]))
+    print("Der kürzeste Pfad von {} zu {} hat die Länge/Gewichtung {} und sieht wie folgt aus.".format(start_knoten, ziel_knoten,
+                                                                                                        kuerzester_pfad[ziel_knoten]))
     print(" -> ".join(reversed(pfad)))
 
 
@@ -117,6 +117,8 @@ def dijkstra(graph, start_knoten):
 
 
 # Programmstart:
+# Leere Set-Initalisierung für die Liste der Knoten (0 bis 9), es darf keine Dopplung geben, deswegen ein Set.
+knoten = set()
 while (True):
     print("Dateien:")
     dateilisten = {"1": "Graph_Dijk1_1.txt", "2": "Graph_Dijk1_2.txt",
@@ -141,8 +143,6 @@ while (True):
     else:
         print("Ungültige Eingabe")
 
-# Leere Set-Initalisierung für die Liste der Knoten (0 bis 9), es darf keine Dopplung geben, deswegen ein Set.
-knoten = set()
 
 # Einlesen der Datei.
 with open(dateizulesen, "r") as datei:
@@ -160,24 +160,40 @@ with open(dateizulesen, "r") as datei:
 # Set wird umgewandelt zu einer Liste, damit datentypbezogene Operationen möglich sind.
 knoten = list(knoten)
 knoten.sort()  # Knoten sortieren in aufsteigender Reihenfolge.
-
-try:
-    # Eingabe des Startknotens und des Zielknotens über die Kommandozeile.
-    while True:
-        start = input("Startknoten[0-9]: ")
-        zielknoten = input("Zielknoten[0-9]: ")
-        if start in knoten and zielknoten in knoten:
-            break
-        else:
-            # Falls die Eingabe Falsch ist, wird die Eingabe wiederholt. Wenn nicht, gehts weiter.
-            print("Falsche eingabe")
-
-except KeyError:
-    print("Ungültige Eingabe")
-
-
 graph = Graph(knoten, origin_graph)  # Erstellung des Graphen
-vorheriger_pfad, kuerzester_pfad = dijkstra(
-    graph=graph, start_knoten=start)  # Funktion des Algorithmus ausführen
-print_ergebnis(vorheriger_pfad, kuerzester_pfad,
-               start_knoten=start, ziel_knoten=zielknoten)  # Ausgabe des Ergebnis
+
+while True:
+    # Ausgabe aller kürzesten Pfade von Null oder Manuelle Eingabe
+    print("1: Vollständige Ausgabe kürzester Pfade von 0 zu allen Knoten?\n2: Manuelle Eingabe? ")
+    entscheidung = input("Warte auf Eingabe: ")
+    if entscheidung == "1":
+        start_knoten = "0"
+        for knt in knoten:
+            vorheriger_pfad, kuerzester_pfad = dijkstra(
+                graph, start_knoten)
+            print_ergebnis(vorheriger_pfad, kuerzester_pfad,
+                           start_knoten, knt)
+        break
+
+    if entscheidung == "2":
+        try:
+            # Eingabe des Startknotens und des Zielknotens über die Kommandozeile.
+            while True:
+                start_knoten = input("Startknoten[0-9]: ")
+                ziel_knoten = input("Zielknoten[0-9]: ")
+                if start_knoten in knoten and ziel_knoten in knoten:
+                    break
+                else:
+                    # Falls die Eingabe Falsch ist, wird die Eingabe wiederholt. Wenn nicht, gehts weiter.
+                    print("Falsche eingabe")
+
+        except KeyError:
+            print("Ungültige Eingabe")
+
+        vorheriger_pfad, kuerzester_pfad = dijkstra(
+            graph, start_knoten)  # Funktion des Algorithmus ausführen
+        print_ergebnis(vorheriger_pfad, kuerzester_pfad,
+                       start_knoten, ziel_knoten)  # Ausgabe des Ergebnis
+        break
+    else:
+        print("Ungültige Eingabe")
