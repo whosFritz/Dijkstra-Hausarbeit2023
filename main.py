@@ -69,7 +69,7 @@ def print_ergebnis(vorheriger_pfad, kuerzester_pfad, start_knoten, ziel_knoten):
     pfad.append(start_knoten)
 
     print("Der kürzeste Pfad von {} zu {} hat die Länge/Gewichtung {} und sieht wie folgt aus.".format(start_knoten, ziel_knoten,
-                                                                                                        kuerzester_pfad[ziel_knoten]))
+                                                                                                       kuerzester_pfad[ziel_knoten]))
     print(" -> ".join(reversed(pfad)))
 
 
@@ -79,10 +79,11 @@ def dijkstra(graph, start_knoten):
     # Mittels diesem dictionary spart man sich die Kosten, jeden Knoten zu besuchen und ihn upzudaten.
     kuerzester_pfad = {}
 
-    # Mittels diesem dictionary,um den bisher bekanntestens kürzesten Pfad zu speicher um zu einem Knoten zu kommen.
+    # Mittels diesem dictionary, um den bisher bekanntesten kürzesten Pfad um zu einem Knoten zu kommen zu speichern.
     vorheriger_pfad = {}
 
-    # Um die Gewichtung der Pfade zu vergleichen muss man einen "infinity-like" Werte festlegen für die unbesuchten Knoten
+    # Um die Gewichtung der Pfade zu vergleichen muss man einen "infinity-like" Wert für die unbesuchten Knoten festlegen.
+    # Dadurch wird jeder unbesuchte Knoten erstmal als "super schlecht" angesehen.
     max_wichtung = sys.maxsize
     for node in unbesuchte_knoten:
         kuerzester_pfad[node] = max_wichtung
@@ -101,14 +102,14 @@ def dijkstra(graph, start_knoten):
                 aktueller_min_knoten = node
 
         # Dieser Code holt sich die Nachbarn des Knotens und updated deren Distanzen
-        neighbors = graph.get_ausgehende_nachbarn(aktueller_min_knoten)
-        for neighbor in neighbors:
-            tentative_wichtung = kuerzester_pfad[aktueller_min_knoten] + \
-                graph.wichtung(aktueller_min_knoten, neighbor)
-            if tentative_wichtung < kuerzester_pfad[neighbor]:
-                kuerzester_pfad[neighbor] = tentative_wichtung
-                # We also update the best pfad to the current node
-                vorheriger_pfad[neighbor] = aktueller_min_knoten
+        nachbarn = graph.get_ausgehende_nachbarn(aktueller_min_knoten)
+        for nachbar in nachbarn:
+            bisherversuchte_wichtung = kuerzester_pfad[aktueller_min_knoten] + \
+                graph.wichtung(aktueller_min_knoten, nachbar)
+            if bisherversuchte_wichtung < kuerzester_pfad[nachbar]:
+                kuerzester_pfad[nachbar] = bisherversuchte_wichtung
+                # Außerdem wird der beste Pfad zum aktuellen Knoten geupdated
+                vorheriger_pfad[nachbar] = aktueller_min_knoten
 
         # Nach dem jeder Nachbar besucht wurde, wird der Knoten als "besucht" markiert, indem er aus der Liste der "unbesuchten Knoten" entfernt wird
         unbesuchte_knoten.remove(aktueller_min_knoten)
