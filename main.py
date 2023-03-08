@@ -4,11 +4,11 @@ import sys
 
 
 class Graph(object):
-    def __init__(self, knoten, origin_graph):
+    def __init__(self, knoten, roh_graph):
         self.knoten = knoten
-        self.graph = self.konstruiere_graph(knoten, origin_graph)
+        self.graph = self.konstruiere_graph(knoten, roh_graph)
 
-    def konstruiere_graph(self, knoten, origin_graph):
+    def konstruiere_graph(self, knoten, roh_graph):
         '''
         Diese Methode stellt sicher, dass der Graph symetrisch ist.
         Wenn ein weg von A nach B mit der Gewichtung W führt,
@@ -18,7 +18,7 @@ class Graph(object):
         for knotenx in knoten:
             graph[knotenx] = {}
 
-        graph.update(origin_graph)
+        graph.update(roh_graph)
 
         for knotenx, verbindung in graph.items():
             for nachbar_knoten, wichtung in verbindung.items():
@@ -117,32 +117,34 @@ def dijkstra(graph, start_knoten):
     return vorheriger_pfad, kuerzester_pfad
 
 
+string = "abcdefg"
+print(string[0:4])
 # Programmstart:
 # Leere Set-Initalisierung für die Liste der Knoten (0 bis 9), es darf keine Dopplung geben, deswegen ein Set.
 knoten = set()
 while (True):
     print("Dateien:")
-    dateilisten = {"1": "Graph_Dijk1_1.txt", "2": "Graph_Dijk1_2.txt",
-                   "3": "Graph_Dijk2_1.txt", "4": "Graph_Dijk2_2.txt"}
+    dateilisten = {"1": "Graph_Dijk1_1.txt", "2": "Graph_Dijk1_2.txt (enthält negative Gewichtung)",
+                   "3": "Graph_Dijk2_1.txt", "4": "Graph_Dijk2_2.txt (enthält negative Gewichtung)"}
     for x in dateilisten:
         print("Für", dateilisten[x], "drücke die Taste", x)
     auswahl = input("Welche Datei lesen: ")
 
-    origin_graph = {}
+    roh_graph = {}
     if auswahl == "1":
-        dateizulesen = dateilisten["1"]
+        dateizulesen = dateilisten["1"][0:17]
         break
     if auswahl == "2":
-        dateizulesen = dateilisten["2"]
+        dateizulesen = dateilisten["2"][0:17]
         break
     if auswahl == "3":
-        dateizulesen = dateilisten["3"]
+        dateizulesen = dateilisten["3"][0:17]
         break
     if auswahl == "4":
-        dateizulesen = dateilisten["4"]
+        dateizulesen = dateilisten["4"][0:17]
         break
     else:
-        print("Ungültige Eingabe")
+        print("Ungültige Eingabe!")
 
 
 # Einlesen der Datei.
@@ -153,15 +155,14 @@ with open(dateizulesen, "r") as datei:
         knoten.add(knoten1)
         knoten.add(knoten2)
         # Knoten falls noch nicht im Graphen-Dictionary in das Dictionary packen,
-        if knoten1 not in origin_graph:
-            origin_graph[knoten1] = {}
+        if knoten1 not in roh_graph:
+            roh_graph[knoten1] = {}
         # falls doch, dann die Gewichtung anpassen
-        origin_graph[knoten1][knoten2] = int(gewicht)
-
+        roh_graph[knoten1][knoten2] = int(gewicht)
 # Set wird umgewandelt zu einer Liste, damit datentypbezogene Operationen möglich sind.
 knoten = list(knoten)
 knoten.sort()  # Knoten sortieren in aufsteigender Reihenfolge.
-graph = Graph(knoten, origin_graph)  # Erstellung des Graphen
+graph = Graph(knoten, roh_graph)  # Erstellung des Graphen
 
 while True:
     # Ausgabe aller kürzesten Pfade von Null oder Manuelle Eingabe
@@ -186,10 +187,10 @@ while True:
                     break
                 else:
                     # Falls die Eingabe Falsch ist, wird die Eingabe wiederholt. Wenn nicht, gehts weiter.
-                    print("Falsche eingabe")
+                    print("Ungültige Eingabe!")
 
         except KeyError:
-            print("Ungültige Eingabe")
+            print("Ungültige Eingabe!")
 
         vorheriger_pfad, kuerzester_pfad = dijkstra(
             graph, start_knoten)  # Funktion des Algorithmus ausführen
@@ -197,4 +198,4 @@ while True:
                        start_knoten, ziel_knoten)  # Ausgabe des Ergebnis
         break
     else:
-        print("Ungültige Eingabe")
+        print("Ungültige Eingabe!")
