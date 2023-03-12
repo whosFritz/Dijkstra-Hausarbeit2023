@@ -124,10 +124,10 @@ print(string[0:4])
 knoten = set()
 while (True):
     print("Dateien:")
-    dateilisten = {"1": "Graph_Dijk1_1.txt", "2": "Graph_Dijk1_2.txt (enthält negative Gewichtung)",
-                   "3": "Graph_Dijk2_1.txt", "4": "Graph_Dijk2_2.txt (enthält negative Gewichtung)"}
+    dateilisten = {"1": "Graph_Dijk2_1.txt",
+                   "2": "Graph_Dijk2_2.txt (enthält negative Gewichtung)"}
     for x in dateilisten:
-        print("Für", dateilisten[x], "drücke die Taste", x)
+        print("Für", dateilisten[x], "drücken Sie die Taste", x)
     auswahl = input("Welche Datei lesen: ")
 
     roh_graph = {}
@@ -136,12 +136,6 @@ while (True):
         break
     if auswahl == "2":
         dateizulesen = dateilisten["2"][0:17]
-        break
-    if auswahl == "3":
-        dateizulesen = dateilisten["3"][0:17]
-        break
-    if auswahl == "4":
-        dateizulesen = dateilisten["4"][0:17]
         break
     else:
         print("Ungültige Eingabe!")
