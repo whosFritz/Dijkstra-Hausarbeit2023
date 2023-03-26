@@ -65,7 +65,6 @@ def print_ergebnis(vorheriger_pfad, kuerzester_pfad, start_knoten, ziel_knoten):
         pfad.append(knoten)
         knoten = vorheriger_pfad[knoten]
 
-    # Add the start node manually
     pfad.append(start_knoten)
 
     print("Der kürzeste Pfad von {} zu {} hat die Länge/Gewichtung {} und sieht wie folgt aus.".format(start_knoten, ziel_knoten,
@@ -117,8 +116,6 @@ def dijkstra(graph, start_knoten):
     return vorheriger_pfad, kuerzester_pfad
 
 
-string = "abcdefg"
-print(string[0:4])
 # Programmstart:
 # Leere Set-Initalisierung für die Liste der Knoten (0 bis 9), es darf keine Dopplung geben, deswegen ein Set.
 knoten = set()
@@ -157,7 +154,6 @@ with open(dateizulesen, "r") as datei:
 knoten = list(knoten)
 knoten.sort()  # Knoten sortieren in aufsteigender Reihenfolge.
 graph = Graph(knoten, roh_graph)  # Erstellung des Graphen
-
 while True:
     # Ausgabe aller kürzesten Pfade von Null oder Manuelle Eingabe
     print("1: Vollständige Ausgabe kürzester Pfade von 0 zu allen Knoten?\n2: Manuelle Eingabe? ")
